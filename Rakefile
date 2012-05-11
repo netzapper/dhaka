@@ -1,11 +1,11 @@
-require 'rake/rdoctask'
-require 'rake/gempackagetask'
+require 'rdoc/task'
+require 'rake/packagetask'
 require 'rake/testtask'
 require 'rubygems'
 
-Rake::RDocTask.new do |rdoc|
-  rdoc.rdoc_files.include('README', 'lib/**/*.rb')
-  rdoc.rdoc_files.exclude("dhaka/lib/lexer/regex_parser.rb")
+RDoc::Task.new do |rdoc|
+  rdoc.rdoc_files.include('README', './lib/**/*.rb')
+  rdoc.rdoc_files.exclude("./dhaka/lib/lexer/regex_parser.rb")
   rdoc.main = "README"
   rdoc.rdoc_dir = '../doc'
 end
@@ -23,8 +23,9 @@ spec = Gem::Specification.new do |s|
   s.has_rdoc = true
 end
 
-Rake::GemPackageTask.new(spec) do |pkg|
+Rake::PackageTask.new(spec) do |pkg|
 	pkg.package_dir = "../gems"
+	pkg.version = 1.5
 end
 
 Rake::TestTask.new do |t|
@@ -34,8 +35,8 @@ Rake::TestTask.new do |t|
 end
 
 task :generate_regex_parser do
-  require 'lib/dhaka'
-  File.open('lib/dhaka/lexer/regex_parser.rb', 'w') do |file| 
+  require './lib/dhaka'
+  File.open('./lib/dhaka/lexer/regex_parser.rb', 'w') do |file| 
     file << Dhaka::Parser.new(Dhaka::LexerSupport::RegexGrammar).compile_to_ruby_source_as('Dhaka::LexerSupport::RegexParser')
   end
 end
@@ -47,18 +48,18 @@ task :default => :test
 task :test => [:generate_chittagong_parser, :generate_chittagong_lexer]
 
 task :generate_chittagong_parser do
-  require 'lib/dhaka'
-  require 'test/chittagong/chittagong_grammar'
-  require 'test/fake_logger'
-  File.open('test/chittagong/chittagong_parser.rb', 'w') do |file| 
+  require './lib/dhaka'
+  require './test/chittagong/chittagong_grammar'
+  require './test/fake_logger'
+  File.open('./test/chittagong/chittagong_parser.rb', 'w') do |file| 
     file << Dhaka::Parser.new(ChittagongGrammar, FakeLogger.new).compile_to_ruby_source_as(:ChittagongParser)
   end
 end
 
 task :generate_chittagong_lexer do
-  require 'lib/dhaka'
-  require 'test/chittagong/chittagong_lexer_specification'
-  File.open('test/chittagong/chittagong_lexer.rb', 'w') do |file| 
+  require './lib/dhaka'
+  require './test/chittagong/chittagong_lexer_specification'
+  File.open('./test/chittagong/chittagong_lexer.rb', 'w') do |file| 
     file << Dhaka::Lexer.new(ChittagongLexerSpecification).compile_to_ruby_source_as(:ChittagongLexer)
   end
 end

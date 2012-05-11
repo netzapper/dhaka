@@ -162,7 +162,7 @@ class TestChittagong < Test::Unit::TestCase
     "
 
     result, output_stream = program_output(program)
-    assert_equal(["5.477898", "263.233029427781", "3.4"], output_stream)
+    assert_equal(["5.477898", "263.23302942778133", "3.4"], output_stream)
   end
 
   
